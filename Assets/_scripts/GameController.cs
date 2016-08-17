@@ -25,7 +25,6 @@ namespace MonterProject
         {
             SetUIPosition(WorkPlaceImage, WorkPlaceGameObject);
             SetUIPosition(Worker, WorkerGameObject);
-
         }
 
         void SetUIPosition(Image itemUi, GameObject target)
