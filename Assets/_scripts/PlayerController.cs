@@ -43,9 +43,9 @@ namespace MonterProject
         /// Создает инструмент
         /// </summary>
         /// <param name="item"></param>
-        public void CreateInstrument(GameObject item)
+        public void CreateInstrument(GameObject item, float offset)
         {
-            Instantiate(item, this.transform.position, Quaternion.identity);
+            Instantiate(item, this.transform.position+transform.forward*offset, Quaternion.identity);
         }
         public IEnumerator ChekPiontEventEnumerator(Vector3 target, STATEHERO statehero)
         {

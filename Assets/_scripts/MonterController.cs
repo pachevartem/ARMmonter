@@ -10,7 +10,9 @@ namespace MonterProject
 
         public int TimeWalk;
         private iTweenPath _path;
+        public GameObject item;
 
+        public STATEHERO Statehero;
         void Start()
         {
             _path=GetComponent<iTweenPath>();
@@ -19,12 +21,15 @@ namespace MonterProject
 
         public override void MethodEndWalk()
         {
-            print("я дошел" + gameObject.name);
+            if (item)
+            {
+                CreateInstrument(item,.3f);
+            }
         }
 
         void Move()
         {
-            MoveTo(_path.pathName,TimeWalk);
+            MoveTo(_path.pathName,TimeWalk,Statehero);
         }
 
 
