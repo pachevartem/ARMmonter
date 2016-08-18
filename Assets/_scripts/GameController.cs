@@ -5,12 +5,9 @@ using UnityEngine.UI;
 
 namespace MonterProject
 {
-
-
-
-
     public class GameController : MonoBehaviour
     {
+        public PlayerController _PlayerController;
         public GameObject Player;
         private Animator _animator;
         public int TimeRun;
@@ -18,8 +15,11 @@ namespace MonterProject
         public GameObject WorkPlaceGameObject;
         public Image Worker;
         public GameObject WorkerGameObject;
+
         private void Start()
-        {}
+        {
+            iTweenMover();
+        }
 
         void Update()
         {
@@ -37,11 +37,15 @@ namespace MonterProject
             _animator = Player.GetComponent<Animator>();
             _animator.SetTrigger("run");
             iTween.MoveTo(Player, iTween.Hash(
-                "path", iTweenPath.GetPath("Artem"),
+                "path", iTweenPath.GetPath("WorkSiteFencing"),
                 "time", TimeRun,
                 "easetype", iTween.EaseType.linear,
                 "orienttopath", true
                 ));
+            var a = iTweenPath.GetPath("WorkSiteFencing");
+            print(a[a.Length-1]);
+            StartCoroutine(_PlayerController.ChekPiontEventEnumerator((a[a.Length - 1])));
+
         }
     }
 }
