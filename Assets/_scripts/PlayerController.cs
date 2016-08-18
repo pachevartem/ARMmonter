@@ -10,16 +10,41 @@ namespace MonterProject
         public GameObject InsPetarda;
         public GameObject InsShieldYellow;
         public GameObject InsShieldRed;
-        private Animator _anim;
-        public enum STATEHERO
+        private  Animator _anim;
+        public  enum STATEHERO
         {
             IDLE,RUN,WORK
         }
+        public  STATEHERO state
+        {
+            get { return state; }
+            set {
+                switch (value)
+                {
+                    case STATEHERO.IDLE:
+                        print("я стою");
+                        _anim.SetTrigger("idle");
 
-        public STATEHERO state = STATEHERO.IDLE;
+                        break;
+                    case STATEHERO.RUN:
+                        print("я бегу");
+                        _anim.SetTrigger("run");
+                        break;
+                    case STATEHERO.WORK:
+                        print("я работаю");
+                        _anim.SetTrigger("work");
+                        break;
+                }
+            }
+        }
 
-        public delegate void ChekPosition();
+        public delegate void ChekPosition(STATEHERO statehero);
         public static event ChekPosition CheckTarget = delegate {};
+
+        void Awake()
+        {
+            CheckTarget += ChangeAnimation;
+        }
 
         void Start()
         {
@@ -37,38 +62,35 @@ namespace MonterProject
 
         void Update()
         {
-            
-        }
-
-        void ChangeAnimation(STATEHERO statehero)
-        {
-            switch (statehero)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                    case STATEHERO.IDLE:
-                    print("я стою");
-                    _anim.SetTrigger("idle");
-
-                    break;
-                    case STATEHERO.RUN:
-                    print("я бегу");
-                    _anim.SetTrigger("run");
-                    break;
-                    case STATEHERO.WORK:
-                    print("я работаю");
-                    _anim.SetTrigger("work");
-                    break;
+                state = STATEHERO.WORK;
+            }
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                state = STATEHERO.IDLE;
+            }
+            if (Input.GetKeyDown(KeyCode.LeftAlt))
+            {
+                state = STATEHERO.RUN;
             }
         }
-
-        public IEnumerator ChekPiontEventEnumerator(Vector3 target)
+        
+        public IEnumerator ChekPiontEventEnumerator(Vector3 target, STATEHERO statehero)
         {
             while (transform.position != target)
             {
                 yield return new WaitForSeconds(0.1f);
+                print("Ienumerator");
             }
-            CheckTarget();
+            CheckTarget(statehero);
         }
 
+
+        void ChangeAnimation(STATEHERO statehero)
+        {
+            state = statehero;
+        }
 
     }
 }

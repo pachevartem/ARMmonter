@@ -44,8 +44,9 @@ namespace MonterProject
                 ));
             var a = iTweenPath.GetPath("WorkSiteFencing");
             print(a[a.Length-1]);
-            StartCoroutine(_PlayerController.ChekPiontEventEnumerator((a[a.Length - 1])));
-
+            StartCoroutine(_PlayerController.ChekPiontEventEnumerator((a[a.Length - 1]),PlayerController.STATEHERO.WORK));
         }
+
+     
     }
 }

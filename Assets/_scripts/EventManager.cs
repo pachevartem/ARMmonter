@@ -6,9 +6,9 @@ namespace MonterProject
 {
     public class EventManager : MonoBehaviour
     {
-        void Awake()
+        void Update ()
         {
-
+          
         }
     }
 }
