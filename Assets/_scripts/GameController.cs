@@ -8,7 +8,7 @@ namespace MonterProject
     public class GameController : MonoBehaviour
     {
      
-
+        
         /// <summary>
         /// Метод для установки текста над элементом
         /// </summary>
@@ -17,6 +17,7 @@ namespace MonterProject
         void SetUIPosition(Image itemUi, GameObject target)
         {
             itemUi.transform.position = Camera.main.WorldToScreenPoint(target.transform.position);
+            
         }
 
      

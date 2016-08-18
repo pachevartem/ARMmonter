@@ -24,6 +24,7 @@ namespace MonterProject
             if (item)
             {
                 CreateInstrument(item,.3f);
+                
             }
         }
 
