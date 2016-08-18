@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using JetBrains.Annotations;
 using UnityEngine.Networking;
@@ -7,49 +8,36 @@ namespace MonterProject
 {
     public class PlayerController : MonoBehaviour
     {
-        public GameObject InsPetarda;
-        public GameObject InsShieldYellow;
-        public GameObject InsShieldRed;
-        private  Animator _anim;
+        private Animator _anim;
         public  enum STATEHERO
         {
             IDLE,RUN,WORK
         }
         public  STATEHERO state
         {
-            get { return state; }
             set {
                 switch (value)
                 {
                     case STATEHERO.IDLE:
-                        print("я стою");
                         _anim.SetTrigger("idle");
-
                         break;
                     case STATEHERO.RUN:
-                        print("я бегу");
                         _anim.SetTrigger("run");
                         break;
                     case STATEHERO.WORK:
-                        print("я работаю");
                         _anim.SetTrigger("work");
                         break;
                 }
             }
         }
 
-        public delegate void ChekPosition(STATEHERO statehero);
-        public static event ChekPosition CheckTarget = delegate {};
+  
 
-        void Awake()
-        {
-            CheckTarget += ChangeAnimation;
-        }
-
-        void Start()
+        protected void Awake()
         {
             _anim = GetComponent<Animator>();
         }
+
 
         /// <summary>
         /// Создает инструмент
@@ -59,37 +47,37 @@ namespace MonterProject
         {
             Instantiate(item, this.transform.position, Quaternion.identity);
         }
-
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                state = STATEHERO.WORK;
-            }
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                state = STATEHERO.IDLE;
-            }
-            if (Input.GetKeyDown(KeyCode.LeftAlt))
-            {
-                state = STATEHERO.RUN;
-            }
-        }
-        
         public IEnumerator ChekPiontEventEnumerator(Vector3 target, STATEHERO statehero)
         {
             while (transform.position != target)
             {
                 yield return new WaitForSeconds(0.1f);
-                print("Ienumerator");
+                //print("Ienumerator "+ gameObject.name.ToString());
             }
-            CheckTarget(statehero);
+            state = statehero;
+            MethodEndWalk();
         }
 
-
-        void ChangeAnimation(STATEHERO statehero)
+        public void MoveTo(string pathName, int timeWalk, STATEHERO statehero)
         {
-            state = statehero;
+            _anim.SetTrigger("run");
+            iTween.MoveTo(gameObject, iTween.Hash("path", iTweenPath.GetPath(pathName), "time", timeWalk, "easetype", iTween.EaseType.linear, "orienttopath", true));
+            var lastPoint = iTweenPath.GetPath(pathName)[iTweenPath.GetPath(pathName).Length - 1];
+            
+            StartCoroutine(ChekPiontEventEnumerator(lastPoint, statehero));
+        }
+        public void MoveTo(string pathName, int timeWalk)
+        {
+             MoveTo(pathName, timeWalk, STATEHERO.WORK);
+        }
+        public void MoveTo(string pathName)
+        {
+            MoveTo(pathName, 2, STATEHERO.WORK);
+        }
+
+        public virtual void MethodEndWalk()
+        {
+
         }
 
     }
